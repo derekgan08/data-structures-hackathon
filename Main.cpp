@@ -192,5 +192,46 @@ int main() {
 	int dashboard;
 	cin >> dashboard;
 
+	switch(dashboard) {
+		case 2: {
+			//load previous game
+			ifstream infileHP, infileArea_ID, infileItem_ID;
+			infileHP.open("HP.txt");
+			int temp_HP=0;
+			infileHP >> temp_HP;
+			player.setLoadHP(temp_HP);
+			infileHP.close();
+			
+			infileArea_ID.open("Area.txt");			
+			infileArea_ID >> area;
+			infileArea_ID.close();
+			
+			infileItem_ID.open("Inventory.txt");
+			while(!infileItem_ID.eof()){
+				int temp_Item_ID;
+				infileItem_ID >> temp_Item_ID;
+				switch(temp_Item_ID){
+					case 2:{
+						if(!inventoryList.itemExist(temp_Item_ID))
+						inventoryList.appendNode(item2);
+						break;
+					}
+					case 5:{
+						if(!inventoryList.itemExist(temp_Item_ID))
+						inventoryList.appendNode(item5);
+						break;
+					}
+					case 11:{
+						if(!inventoryList.itemExist(temp_Item_ID))
+						inventoryList.appendNode(item11);
+						break;
+					}
+				}
+				eventList.deleteEvent(temp_Item_ID);
+			}
+			infileItem_ID.close();			
+		}
+	}
+
 	return 0;
 }
