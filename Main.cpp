@@ -231,6 +231,345 @@ int main() {
 			}
 			infileItem_ID.close();			
 		}
+		case 1: {
+			//Start a new game
+			mapUI();
+			if(dashboard==1){
+				ofstream outfile;
+				outfile.open("Inventory.txt", ofstream::trunc);
+				outfile.close();
+				area=0; //default area=0;
+				cout << "\nIt was on Christmas eve. You were on your way home after a long year working abroad to celebrate Christmas with your family. The plane had been en route to a bustling metropolis, carrying people from all walks of life. It was supposed to be a journey full of anticipation where people are excited to be reunited with their friends and families, but fate had other plans...You awoke with a sharp pain in your head, with confusion surrounding you as to why you were lying on the ground in the middle of a forest. Then, the sudden realisation hit you, your plane has crashed. With a strong determination to meet your beloved family, you must find a way to survive and escape this forest." << endl;	
+			}
+			
+			//Officially Start Game
+			int matchID;
+			do {
+				switch(area) {
+					//EmptyGround
+					case 0: {
+						cout << "\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n";
+						cout << "EMPTY GROUND\n" << endl;
+						getline(infileDescription, temp_line);
+						cout << temp_line << endl; 
+						cout << "\nHP: " << player.getHP() << endl;
+						cout << "INVENTORY: ";
+						inventoryList.traverseInventory();
+						cout << "-------------------------------------------------------------------------------------------------------";
+						area = ground.choose(ground);
+						break;
+					}
+		
+					//PlaneWreck1
+					case 1: {
+						cout << "\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n";
+						cout << "PLANEWRECK 1 AREA\n" << endl;
+						matchID = rand()%3;
+						if(inventoryList.itemExist(matchID)) {
+							matchID = matchID-2;
+						}
+						if(matchID==2) {
+							inventoryList.appendNode(item2);
+							//Write item_ID into the file
+							ofstream outfileItem_ID;
+							outfileItem_ID.open("Inventory.txt", ios::app);
+							outfileItem_ID << 2 << endl;
+							outfileItem_ID.close();
+							wreck1.event(matchID,eventList,inventoryList); //Call EVENT3
+//							inventoryList.traverseInventory();
+							cout << "\nHP: " << player.getHP() << endl;
+							cout << "INVENTORY: ";
+							inventoryList.traverseInventory();
+							cout << "-------------------------------------------------------------------------------------------------------";
+							eventList.deleteEvent(2);
+						} else if(matchID==1) {
+							player.setHP(20);
+							wreck1.event(matchID,eventList,inventoryList);
+							cout << "\nHP + 20\n";
+							cout << "\nHP: " << player.getHP() << endl;
+							cout << "INVENTORY: ";
+							inventoryList.traverseInventory();
+							cout << "-------------------------------------------------------------------------------------------------------";
+						} else {
+							wreck1.event(matchID,eventList,inventoryList); //Call EVENT1
+							cout << "\nHP: " << player.getHP() << endl;
+							cout << "INVENTORY: ";
+							inventoryList.traverseInventory();
+							cout << "-------------------------------------------------------------------------------------------------------";
+						}
+		
+						if(player.getHP()>0) {
+							area = wreck1.choose(wreck1); //Choose next area
+						}
+						break;
+					}
+		
+					//PlaneWreck2
+					case 2: {
+						cout << "\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n";
+						cout << "PLANEWRECK 2 AREA\n" << endl;
+						matchID = (rand()%3)+3;
+						if(inventoryList.itemExist(matchID)) {
+							matchID = matchID-2;
+						}
+						if(matchID==(2+3)) {
+							inventoryList.appendNode(item5);
+							//Write item_ID into the file
+							ofstream outfileItem_ID;
+							outfileItem_ID.open("Inventory.txt", ios::app);
+							outfileItem_ID << 5 << endl;
+							outfileItem_ID.close();
+							wreck2.event(matchID,eventList,inventoryList);
+//							inventoryList.traverseInventory();
+							cout << "\nHP: " << player.getHP() << endl;
+							cout << "INVENTORY: ";
+							inventoryList.traverseInventory();
+							cout << "-------------------------------------------------------------------------------------------------------";
+							eventList.deleteEvent(5);
+						} else if (matchID==(2+3-1)) {
+							wreck2.event(matchID,eventList,inventoryList);
+							cout << "\nHP: " << player.getHP() << endl;
+							cout << "INVENTORY: ";
+							inventoryList.traverseInventory();
+							cout << "-------------------------------------------------------------------------------------------------------\n";
+							cout << "Would you like to read the letter? (y/n)\n";
+							char choice;
+							cin >> choice;
+							if (choice == 'y' || choice == 'Y'){
+								cout << "\n--------------------------------------------------------------------------------\n";
+								cout << "| Hey Marie,                                                                   |\n";
+								cout << "|                                                                              |\n";
+								cout << "| sorry I couldn't have been home as much these few days, it's a high season   |\n";
+								cout << "| for people to fly and we are a bit understaffed. I promise I'll make it up   |\n";
+								cout << "| to you when I reach home, wait for me ok? How's our little girl Carol doing? |\n";
+								cout << "| Be sure to buy her lots of toys yeah? Kids her age would LOVE to play with   |\n";
+								cout << "| toys, especially TEDDY BEARS. Anyways, be sure to keep yourselves warm and   |\n";
+								cout << "| healthy, don't forget to water the plants too! I'll be home before you even  |\n";
+								cout << "| know it.                                                                     |\n";
+								cout << "|                                                                              |\n";
+								cout << "|                                                                              |\n";
+								cout << "|                                                                              |\n";
+								cout << "|                                                              Sincerely,      |\n";
+								cout << "|                                                              Jason           |\n";
+								cout << "--------------------------------------------------------------------------------\n";
+
+							}
+							else{
+								cout << "\nYou decided not to read the letter.";
+								cout << "\n-------------------------------------------------------------------------------------------------------";
+							}
+							
+							
+						}
+						else{
+							wreck2.event(matchID,eventList,inventoryList);
+							cout << "\nHP: " << player.getHP() << endl;
+							cout << "INVENTORY: ";
+							inventoryList.traverseInventory();
+							cout << "-------------------------------------------------------------------------------------------------------";
+						}
+		
+						if (player.getHP()>0) {
+							area = wreck2.choose(wreck2);//Choose next area
+						}
+						break;
+					}
+		
+					//River
+					case 3: {
+						cout << "\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n";
+						cout << "RIVER AREA\n" << endl;
+						matchID = (rand()%3)+3+3;
+						if(matchID==(2+3+3)) {
+							if(inventoryList.itemExist(11)) {
+								cout << "You noticed you can build a boat using the planks in your inventory, would you like to build a boat? (y/n)" << endl;
+								char choice;
+								cin>>choice;
+								if (choice == 'y'|| choice=='Y'){
+									cout << "With the knowledge you have, you start building a small boat that can fit yourself. Using planks and other natural resources, you successfully built a boat and sailed away into civilization.\n" << endl;
+									eventList.deleteEvent(8);
+									inventoryList.deleteItem(8);
+									winUI();
+								
+									ofstream outfile;
+									outfile.open("Inventory.txt", ofstream::trunc);
+									outfile.close();
+									remove("Inventory.txt");
+									
+									outfile.open("HP.txt", ofstream::trunc);
+									outfile.close();
+									remove("HP.txt");
+									
+									outfile.open("Area.txt", ofstream::trunc);
+									outfile.close();
+									remove("Area.txt");
+									area=-1;
+									winCode =1; //Code not to enter loseUI()
+								}
+								else{
+									cout << "You decided to save your energy and not build a boat." << endl;
+								}
+							
+							} else {
+								river.event(matchID, eventList, inventoryList);
+								cout << "\nHP: " << player.getHP() << endl;
+								cout << "INVENTORY: ";
+								inventoryList.traverseInventory();
+								cout << "\n-------------------------------------------------------------------------------------------------------";
+							}
+						} else if(matchID==(2+3+3-1)) {
+							player.setHP(10);
+							river.event(matchID,eventList,inventoryList);
+							cout << "\nHP + 10\n";
+							cout << "\nHP: " << player.getHP() << endl;
+							cout << "INVENTORY: ";
+							inventoryList.traverseInventory();
+							cout << "\n-------------------------------------------------------------------------------------------------------";
+						} else {
+							river.event(matchID,eventList,inventoryList); //Call event1
+							cout << "\nHP: " << player.getHP() << endl;
+							cout << "INVENTORY: ";
+							inventoryList.traverseInventory();
+							cout << "\n-------------------------------------------------------------------------------------------------------";
+						}
+						if (player.getHP()>0 && winCode	!= 1) {
+							area = river.choose(river);
+						}
+						break;
+					}
+		
+					//Forest
+					case 4: {
+						cout << "\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n";
+						cout << "FOREST AREA\n" << endl;
+						matchID = (rand()%3)+3+3+3;
+						if(inventoryList.itemExist(matchID)) {
+							matchID = matchID-2;
+						}
+						if(matchID==(2+3+3+3)) {
+							if (inventoryList.itemExist(5)) {
+								forest.event(matchID,eventList,inventoryList); //Call EVENT3
+								cout << "\nDo you want to use the axe to chop the tree down? (y/n)\n";
+								char choice;
+								cin >> choice;
+								
+								if(choice == 'y' || choice == 'Y'){
+									inventoryList.appendNode(item11);
+									//Write item_ID into the file
+									ofstream outfileItem_ID;
+									outfileItem_ID.open("Inventory.txt", ios::app);
+									outfileItem_ID << 11 << endl;
+									outfileItem_ID.close();
+									eventList.deleteEvent(11);
+									cout << "\nYou sucessfully used the axe to chop down the tree and obtained planks!";
+									cout << "\nHP: " << player.getHP() << endl;
+									cout << "INVENTORY: ";
+									inventoryList.traverseInventory();	
+									cout << "\n-------------------------------------------------------------------------------------------------------";
+								}
+								else{
+									cout << "You decided not to chop down the tree.";
+									cout << "\n-------------------------------------------------------------------------------------------------------";
+								}
+							} else {
+								cout << "There are many trees here, perhaps I could use a tool to chop it down...." << endl;
+								cout << "\nHP: " << player.getHP() << endl;
+								cout << "INVENTORY: ";
+								inventoryList.traverseInventory();								
+								cout << "-------------------------------------------------------------------------------------------------------";
+							}
+						} else if(matchID==(2+3+3+3-1)) {
+							player.setHP(-20);
+							forest.event(matchID,eventList,inventoryList);
+							cout << "\nHP - 20\n";
+							cout << "\nHP: " << player.getHP() << endl;
+							cout << "INVENTORY: ";
+							inventoryList.traverseInventory();
+							cout << "-------------------------------------------------------------------------------------------------------";
+						} else {
+							forest.event(matchID,eventList,inventoryList); //Call EVENT1
+							cout << "\nHP: " << player.getHP() << endl;
+							cout << "INVENTORY: ";
+							inventoryList.traverseInventory();
+							cout << "-------------------------------------------------------------------------------------------------------";
+						}
+		
+						if(player.getHP()>0) {
+							area = forest.choose(forest);
+						}
+						break;
+					}
+		
+					//Village
+					case 5: {
+						cout << "\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n";
+						cout << "VILLAGE AREA\n" << endl;
+						matchID = (rand()%3)+3+3+3+3;
+						if (matchID==(2+3+3+3+3)) {
+							if(inventoryList.itemExist(2)) {
+								cout << "One of the children from the village looks at the teddy bear in your hands with eager eyes. \nWould you like to give it to her? (y/n)" << endl;
+								char choice;
+								cin>>choice;
+								if (choice == 'y'|| choice=='Y'){
+									cout << "You decided that the best course of action is to give it to her. After presenting the child with the teddy bear, the father of the child gives you a wireless radio in exchange for your kind gesture. You used the radio to contact help and successfully escaped into civilisation." << endl;
+									inventoryList.deleteItem(2);
+									eventList.deleteEvent(14);
+									winUI();
+									ofstream outfile;
+									outfile.open("Inventory.txt", ofstream::trunc);
+									outfile.close();
+									remove("Inventory.txt");
+									
+									outfile.open("HP.txt", ofstream::trunc);
+									outfile.close();
+									remove("HP.txt");
+									
+									outfile.open("Area.txt", ofstream::trunc);
+									outfile.close();
+									remove("Area.txt");
+									area = -1;//end switch
+									winCode = 1;
+									return 0;
+								}
+								else{
+									cout << "She feels sad towards your choice.";
+								}
+								
+							} else {
+								cout << "You are not welcomed by the villagers." << endl;
+							}
+						} else if(matchID==(2+3+3+3+3-1)) {
+							player.setHP(-10);
+							village.event(matchID,eventList,inventoryList);
+							cout << "\nHP - 10\n";
+							cout << "\nHP: " << player.getHP() << endl;
+							cout << "INVENTORY: ";
+							inventoryList.traverseInventory();
+							cout << "-------------------------------------------------------------------------------------------------------";
+						} else {
+							village.event(matchID,eventList,inventoryList); //Call event1
+							cout << "\nHP: " << player.getHP() << endl;
+							cout << "INVENTORY: ";
+							inventoryList.traverseInventory();
+							cout << "-------------------------------------------------------------------------------------------------------";
+						}
+						if (player.getHP()>0) {
+							area = village.choose(village);
+						}
+						break;
+					}
+					case -1:
+					default:
+						break;
+				}
+				//Write player.getHP() into the file
+				ofstream outfileHP;
+				outfileHP.open("HP.txt");
+				outfileHP<<player.getHP();
+				outfileHP.close();
+			} while(area!=-1 && player.getHP()>0);			
+			break;
+		}
 	}
 
 	return 0;
