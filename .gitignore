@@ -1,0 +1,20 @@
+# Ignore object files
+*.o
+
+# Ignore executable files
+*.exe
+
+# Ignore IDE-specific files
+*.layout
+*.dev
+
+# Ignore Windows-specific files (like .win)
+*.win
+
+# Ignore vscode cofiguration file
+.vscode/
+
+# Ignore temporary data txt files
+Area.txt
+HP.txt
+Inventory.txt
